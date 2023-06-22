@@ -118,6 +118,7 @@ void HelloSamplerAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -155,6 +156,7 @@ void HelloSamplerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    //buffer.applyGain(mMasterGain);
 }
 
 //==============================================================================
@@ -184,6 +186,7 @@ void HelloSamplerAudioProcessor::setStateInformation (const void* data, int size
 
 void HelloSamplerAudioProcessor::loadFile()
 {
+    mSampler.clearSounds();
     
     juce::File file("/Users/omar/Documents/THESIS_CODE/argparse_output/closest_match.wav");
     

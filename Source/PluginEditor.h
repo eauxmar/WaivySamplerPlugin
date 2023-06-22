@@ -45,6 +45,10 @@ private:
     juce::Slider mAttackSlider, mDecaySlider, mSustainSlider, mReleaseSlider;
     juce::Label mAttackLabel, mDecayLabel, mSustainLabel, mReleaseLabel;
     
+    juce::Slider mMasterVolumeSlider;
+    //juce::Label mMasterVolumeLabel;
+
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     HelloSamplerAudioProcessor& audioProcessor;

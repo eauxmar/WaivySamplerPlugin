@@ -27,7 +27,6 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
             // Handle error, print to console for now
             std::cout << "System command failed with code: " << result << std::endl;
         }
-
         loadImage();
         
         // Now load the file
@@ -64,7 +63,7 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
     //sustain sliders below
     mSustainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mSustainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 80, 20);
-    mSustainSlider.setRange(0.0f, 5.0f, 0.01f);
+    mSustainSlider.setRange(0.0f, 1.0f, 0.01f); //maybe set max at 1
     mSustainSlider.addListener(this);
     addAndMakeVisible(mSustainSlider);
     //sustain labels
@@ -77,7 +76,7 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
     //release sliders below
     mReleaseSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     mReleaseSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 80, 20);
-    mReleaseSlider.setRange(0.0f, 5.0f, 0.01f);
+    mReleaseSlider.setRange(0.01f, 5.0f, 0.01f); //maybe put 0.01
     mReleaseSlider.addListener(this);
     addAndMakeVisible(mReleaseSlider);
     //release labels
@@ -85,6 +84,19 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
     mReleaseLabel.setText("Release", juce::dontSendNotification);
     mReleaseLabel.setJustificationType(juce::Justification::centredBottom);
     mReleaseLabel.attachToComponent(&mReleaseSlider, false);
+    
+    // Master Volume sliders
+   //mMasterVolumeSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+   //mMasterVolumeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 80, 20);
+   //mMasterVolumeSlider.setRange(0.0f, 1.0f, 0.01f);
+   //mMasterVolumeSlider.addListener(this);
+   //addAndMakeVisible(mMasterVolumeSlider);
+
+   //mMasterVolumeLabel.setFont(10.0f);
+   //mMasterVolumeLabel.setText("Master Volume", juce::dontSendNotification);
+   //mMasterVolumeLabel.setJustificationType(juce::Justification::centredBottom);
+   //mMasterVolumeLabel.attachToComponent(&mMasterVolumeSlider, false);
+    
     
 
     
@@ -108,6 +120,12 @@ HelloSamplerAudioProcessorEditor::HelloSamplerAudioProcessorEditor (HelloSampler
 
 HelloSamplerAudioProcessorEditor::~HelloSamplerAudioProcessorEditor()
 {
+    mAttackSlider.removeListener(this);
+    mDecaySlider.removeListener(this);
+    mSustainSlider.removeListener(this);
+    mReleaseSlider.removeListener(this);
+    //mMasterVolumeSlider.removeListener(this);
+    
 }
 
 //==============================================================================
@@ -162,6 +180,8 @@ void HelloSamplerAudioProcessorEditor::resized()
     mDecaySlider.setBounds(slidersX + sliderWidth + sliderSpacing, slidersY, sliderWidth, sliderHeight);
     mSustainSlider.setBounds(slidersX + 2 * (sliderWidth + sliderSpacing), slidersY, sliderWidth, sliderHeight);
     mReleaseSlider.setBounds(slidersX + 3 * (sliderWidth + sliderSpacing), slidersY, sliderWidth, sliderHeight);
+    
+    //mMasterVolumeSlider.setBounds(slidersX + 4 * (sliderWidth + sliderSpacing), slidersY, sliderWidth, //sliderHeight);
 }
 
 void HelloSamplerAudioProcessorEditor::loadImage()
@@ -180,19 +200,32 @@ void HelloSamplerAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
     if (slider == &mAttackSlider)
     {
         audioProcessor.getADSRParams().attack = mAttackSlider.getValue();
+        audioProcessor.updateADSR();
+
     }
     else if (slider == &mDecaySlider)
     {
         audioProcessor.getADSRParams().decay = mDecaySlider.getValue();
+        audioProcessor.updateADSR();
+
     }
     else if (slider == &mSustainSlider)
     {
         audioProcessor.getADSRParams().sustain = mSustainSlider.getValue();
+        audioProcessor.updateADSR();
+
     }
     else if (slider == &mReleaseSlider)
     {
         audioProcessor.getADSRParams().release = mReleaseSlider.getValue();
+        audioProcessor.updateADSR();
+
     }
-    audioProcessor.updateADSR();
+    //else if (slider == &mMasterVolumeSlider)
+    //{
+    //    audioProcessor.mMasterGain = mMasterVolumeSlider.getValue();
+    //}
+    //
+    //audioProcessor.updateADSR();
     
 }

@@ -61,6 +61,8 @@ public:
     
     void updateADSR();
     juce::ADSR::Parameters& getADSRParams() {return mADSRParams; }
+    //float mMasterGain = 1.0f;
+    
 
 
 private:
@@ -71,6 +73,8 @@ private:
     
     juce::AudioFormatManager mFormatmanager;
     juce::AudioFormatReader* mFormatReader {nullptr};
+    
+    
     
     
     //==============================================================================
